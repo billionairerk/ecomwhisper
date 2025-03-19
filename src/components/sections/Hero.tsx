@@ -1,7 +1,8 @@
 
 import React, { useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
-import { ChevronRight, Sparkles, Search, Bell, LineChart } from 'lucide-react';
+import { ArrowRight, Sparkles, Search, LineChart, BarChart4, Zap } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Hero = () => {
   const heroRef = useRef<HTMLDivElement>(null);
@@ -41,26 +42,29 @@ const Hero = () => {
           {/* Badge */}
           <div className="inline-flex items-center px-4 py-2 rounded-full bg-primary/10 backdrop-blur-sm border border-primary/20 text-primary mb-6 reveal-on-scroll">
             <Sparkles className="h-4 w-4 mr-2" />
-            <span className="text-sm font-medium">AI-Powered SEO Insights</span>
+            <span className="text-sm font-medium">Think Different. Rank Better.</span>
           </div>
           
           {/* Headline */}
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-display font-bold tracking-tight text-balance leading-tight reveal-on-scroll">
-            Real-Time SEO &<br />Competitor Analysis <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70">AI Tool</span>
+          <h1 className="text-4xl sm:text-5xl md:text-7xl font-display font-bold tracking-tight text-balance leading-tight reveal-on-scroll">
+            The SEO Tool <br />That Just Works
           </h1>
           
           {/* Subheadline */}
           <p className="max-w-2xl mx-auto text-xl text-muted-foreground reveal-on-scroll">
-            Stay ahead with instant insights, real-time alerts, and AI-driven growth hacks that transform your SEO strategy and outperform competitors.
+            At the intersection of simplicity and power. Monitor competitors, receive real-time alerts, 
+            and get AI insights in one beautifully designed experience.
           </p>
           
           {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8 reveal-on-scroll">
-            <Button size="lg" className="rounded-full text-base px-8 py-6">
-              Get Started <ChevronRight className="ml-1 h-5 w-5" />
-            </Button>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-12 reveal-on-scroll">
+            <Link to="/dashboard">
+              <Button size="lg" className="rounded-full text-base px-8 py-6 shadow-lg">
+                Try Dashboard Demo <ArrowRight className="ml-1 h-5 w-5" />
+              </Button>
+            </Link>
             <Button size="lg" variant="outline" className="rounded-full text-base px-8 py-6">
-              Watch Demo
+              Learn More
             </Button>
           </div>
         </div>
@@ -68,8 +72,8 @@ const Hero = () => {
       
       {/* Dashboard Preview */}
       <div className="relative w-full max-w-6xl mx-auto reveal-on-scroll">
-        <div className="glass-card rounded-3xl border border-white/20 shadow-elevated overflow-hidden">
-          <div className="relative bg-white/30 dark:bg-black/30 backdrop-blur-lg p-6 rounded-t-3xl border-b border-white/20">
+        <div className="glass-card rounded-[2rem] border border-white/20 shadow-elevated overflow-hidden">
+          <div className="relative bg-white/30 dark:bg-black/30 backdrop-blur-lg p-6 rounded-t-[2rem] border-b border-white/20">
             <div className="flex items-center">
               <div className="flex space-x-2 absolute left-6">
                 <div className="w-3 h-3 rounded-full bg-rose-500"></div>
@@ -85,36 +89,55 @@ const Hero = () => {
             </div>
           </div>
           
-          <div className="p-6 bg-gradient-to-b from-white/50 to-white/30 dark:from-black/50 dark:to-black/30 h-[400px] backdrop-blur-md">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 h-full">
-              <div className="col-span-2 grid grid-rows-2 gap-4">
-                <div className="subtle-glass rounded-xl p-4 flex items-center">
-                  <div className="mr-4 p-3 bg-primary/10 rounded-lg">
-                    <LineChart className="h-6 w-6 text-primary" />
+          <div className="p-6 bg-gradient-to-b from-white/50 to-white/30 dark:from-black/50 dark:to-black/30 h-[450px] backdrop-blur-md">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-4 h-full">
+              <div className="col-span-8 grid grid-rows-2 gap-4">
+                <div className="subtle-glass rounded-xl p-4">
+                  <div className="flex justify-between items-center mb-4">
+                    <div className="flex items-center">
+                      <div className="mr-3 p-2 bg-primary/10 rounded-lg">
+                        <LineChart className="h-5 w-5 text-primary" />
+                      </div>
+                      <h4 className="font-medium">Keyword Rankings</h4>
+                    </div>
+                    <div className="pill-badge">Live Data</div>
                   </div>
-                  <div>
-                    <h4 className="font-medium text-sm">Competitor Rankings</h4>
-                    <p className="text-xs text-muted-foreground">Real-time monitoring</p>
-                  </div>
+                  <div className="h-[120px] bg-white/20 dark:bg-black/20 rounded-lg"></div>
                 </div>
-                <div className="subtle-glass rounded-xl p-4 flex items-center">
-                  <div className="mr-4 p-3 bg-primary/10 rounded-lg">
-                    <Bell className="h-6 w-6 text-primary" />
+                <div className="subtle-glass rounded-xl p-4">
+                  <div className="flex justify-between items-center mb-4">
+                    <div className="flex items-center">
+                      <div className="mr-3 p-2 bg-primary/10 rounded-lg">
+                        <BarChart4 className="h-5 w-5 text-primary" />
+                      </div>
+                      <h4 className="font-medium">Competitive Analysis</h4>
+                    </div>
+                    <div className="pill-badge">Updated</div>
                   </div>
-                  <div>
-                    <h4 className="font-medium text-sm">Real-Time Alerts</h4>
-                    <p className="text-xs text-muted-foreground">Instant notifications</p>
-                  </div>
+                  <div className="h-[120px] bg-white/20 dark:bg-black/20 rounded-lg"></div>
                 </div>
               </div>
-              <div className="subtle-glass rounded-xl p-4">
-                <h4 className="font-medium text-sm mb-2">AI Recommendations</h4>
-                <div className="space-y-2">
-                  <div className="bg-white/30 dark:bg-black/20 p-2 rounded-lg text-xs">
-                    Add missing keywords for better ranking
+              <div className="col-span-4 subtle-glass rounded-xl p-4">
+                <div className="flex justify-between items-center mb-4">
+                  <div className="flex items-center">
+                    <div className="mr-3 p-2 bg-primary/10 rounded-lg">
+                      <Zap className="h-5 w-5 text-primary" />
+                    </div>
+                    <h4 className="font-medium">AI Insights</h4>
                   </div>
-                  <div className="bg-white/30 dark:bg-black/20 p-2 rounded-lg text-xs">
-                    Optimize meta descriptions
+                </div>
+                <div className="space-y-3">
+                  <div className="bg-white/30 dark:bg-black/20 p-3 rounded-lg text-sm">
+                    <p className="font-medium">Ranking Opportunity</p>
+                    <p className="text-xs text-muted-foreground mt-1">Add these keywords to improve position by 30%</p>
+                  </div>
+                  <div className="bg-white/30 dark:bg-black/20 p-3 rounded-lg text-sm">
+                    <p className="font-medium">Content Gap</p>
+                    <p className="text-xs text-muted-foreground mt-1">Competitor's article outperforming by 45%</p>
+                  </div>
+                  <div className="bg-white/30 dark:bg-black/20 p-3 rounded-lg text-sm">
+                    <p className="font-medium">Backlink Alert</p>
+                    <p className="text-xs text-muted-foreground mt-1">3 new opportunities detected today</p>
                   </div>
                 </div>
               </div>
