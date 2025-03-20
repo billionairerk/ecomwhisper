@@ -33,7 +33,7 @@ const Navbar = () => {
       className={cn(
         'fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-4 px-6 md:px-10',
         {
-          'bg-zinc-900/80 backdrop-blur-lg shadow-md': isScrolled,
+          'bg-zinc-900/90 backdrop-blur-lg shadow-md': isScrolled,
           'bg-transparent': !isScrolled,
         }
       )}
@@ -45,6 +45,7 @@ const Navbar = () => {
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
+              whileHover={{ scale: 1.05 }}
               className="text-3xl font-display font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-violet-400"
             >
               trisul.ai
@@ -61,8 +62,15 @@ const Navbar = () => {
         </nav>
 
         <div className="hidden md:flex items-center space-x-4">
-          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-            <Button variant="outline" className="rounded-md border-zinc-700 hover:border-zinc-600 bg-transparent text-zinc-300 hover:bg-zinc-800/50">
+          <motion.div 
+            whileHover={{ scale: 1.05 }} 
+            whileTap={{ scale: 0.95 }}
+            className="button-hover"
+          >
+            <Button 
+              variant="outline" 
+              className="rounded-md border-zinc-700 hover:border-zinc-600 bg-transparent text-zinc-300 hover:bg-zinc-800/50 transition-all duration-300"
+            >
               Login
             </Button>
           </motion.div>
@@ -71,7 +79,9 @@ const Navbar = () => {
             whileTap={{ scale: 0.95 }}
             className="button-pulse"
           >
-            <Button className="rounded-md bg-blue-600 hover:bg-blue-700 shadow-glow shadow-blue-600/20 transition-all duration-300 hover:shadow-blue-600/40">
+            <Button 
+              className="rounded-md bg-blue-600 hover:bg-blue-700 shadow-glow shadow-blue-600/20 transition-all duration-300 hover:shadow-blue-600/40 hover:-translate-y-1"
+            >
               Get Started <ChevronRight className="ml-1 h-4 w-4" />
             </Button>
           </motion.div>
@@ -99,7 +109,7 @@ const Navbar = () => {
             initial={{ x: '100%' }}
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
-            transition={{ type: 'tween', duration: 0.3 }}
+            transition={{ type: 'tween', duration: 0.3, ease: "easeInOut" }}
             className="fixed inset-0 z-40 bg-zinc-900 flex flex-col"
           >
             <div className="flex flex-col h-full p-6 pt-24">
@@ -109,10 +119,15 @@ const Navbar = () => {
                 <MobileNavLink href="#pricing" onClick={toggleMobileMenu}>Pricing</MobileNavLink>
                 <MobileNavLink href="#about" onClick={toggleMobileMenu}>About</MobileNavLink>
                 <div className="border-t border-zinc-800 pt-6 mt-6">
-                  <Button variant="outline" className="w-full mb-4 border-zinc-700 bg-transparent text-zinc-300 hover:bg-zinc-800/50">
+                  <Button 
+                    variant="outline" 
+                    className="w-full mb-4 border-zinc-700 bg-transparent text-zinc-300 hover:bg-zinc-800/50 transition-all duration-300"
+                  >
                     Login
                   </Button>
-                  <Button className="w-full bg-blue-600 hover:bg-blue-700 shadow-glow">
+                  <Button 
+                    className="w-full bg-blue-600 hover:bg-blue-700 shadow-glow shadow-blue-600/20 transition-all duration-300 hover:shadow-blue-600/40 hover:-translate-y-1"
+                  >
                     Get Started
                   </Button>
                 </div>

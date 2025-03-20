@@ -3,6 +3,7 @@ import React from 'react';
 import { Bell, User, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
 interface DashboardHeaderProps {
   children?: React.ReactNode;
@@ -12,6 +13,14 @@ const DashboardHeader = ({ children }: DashboardHeaderProps) => {
   return (
     <header className="h-16 border-b border-zinc-800 bg-zinc-900/80 backdrop-blur-md px-6 flex items-center justify-between">
       <div className="flex items-center w-full max-w-md">
+        <Link to="/" className="mr-6">
+          <motion.span 
+            whileHover={{ scale: 1.05 }}
+            className="text-xl font-display font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-violet-400"
+          >
+            trisul.ai
+          </motion.span>
+        </Link>
         <div className="relative w-full">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400" />
           <input
@@ -25,10 +34,14 @@ const DashboardHeader = ({ children }: DashboardHeaderProps) => {
       <div className="flex items-center space-x-4">
         {children}
         
-        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+        <motion.div 
+          whileHover={{ scale: 1.05 }} 
+          whileTap={{ scale: 0.95 }}
+          className="relative"
+        >
           <Button variant="ghost" size="icon" className="relative hover:bg-zinc-800">
             <Bell size={18} className="text-zinc-400" />
-            <span className="absolute top-1 right-1 w-2 h-2 bg-blue-500 rounded-full"></span>
+            <span className="absolute top-1 right-1 w-2 h-2 bg-blue-500 rounded-full shadow-glow shadow-blue-500/50"></span>
           </Button>
         </motion.div>
         
@@ -37,7 +50,11 @@ const DashboardHeader = ({ children }: DashboardHeaderProps) => {
             <p className="text-sm font-medium text-zinc-300">Sarah Johnson</p>
             <p className="text-xs text-zinc-500">Admin</p>
           </div>
-          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+          <motion.div 
+            whileHover={{ scale: 1.05 }} 
+            whileTap={{ scale: 0.95 }}
+            className="relative"
+          >
             <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full bg-zinc-800 hover:bg-zinc-700">
               <User size={18} className="text-zinc-300" />
             </Button>

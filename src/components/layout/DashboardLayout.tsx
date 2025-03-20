@@ -4,6 +4,7 @@ import DashboardSidebar from './DashboardSidebar';
 import DashboardHeader from './DashboardHeader';
 import { cn } from '@/lib/utils';
 import { Moon, Sun } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -39,37 +40,63 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   return (
     <div className={cn(
       "flex h-screen overflow-hidden transition-all duration-300",
-      "bg-gradient-to-br from-background to-background/95 dark:from-zinc-950 dark:to-black"
+      "bg-gradient-to-br from-zinc-950 to-black"
     )}>
-      <div 
-        className={cn(
-          "transition-all duration-300 ease-in-out",
-          isSidebarCollapsed ? "w-20" : "w-64"
-        )}
+      <motion.div 
+        layout
+        initial={{ width: isSidebarCollapsed ? "5rem" : "16rem" }}
+        animate={{ width: isSidebarCollapsed ? "5rem" : "16rem" }}
+        transition={{ duration: 0.3, ease: "easeInOut" }}
+        className="transition-all duration-300 ease-in-out"
       >
         <DashboardSidebar 
           collapsed={isSidebarCollapsed} 
           toggleCollapse={toggleSidebar} 
         />
-      </div>
+      </motion.div>
       <div className="flex-1 flex flex-col overflow-hidden">
         <DashboardHeader>
-          <button
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
             onClick={toggleDarkMode}
-            className="ml-auto p-2 rounded-full hover:bg-muted transition-colors focus:outline-none focus-ring"
+            className="ml-auto p-2 rounded-full hover:bg-zinc-800 transition-colors focus:outline-none focus-ring"
             aria-label="Toggle dark mode"
           >
-            {isDarkMode ? (
-              <Sun className="h-5 w-5 text-yellow-400" />
-            ) : (
-              <Moon className="h-5 w-5 text-slate-600" />
-            )}
-          </button>
+            <AnimatePresence mode="wait" initial={false}>
+              {isDarkMode ? (
+                <motion.div
+                  key="sun"
+                  initial={{ rotate: -90, opacity: 0 }}
+                  animate={{ rotate: 0, opacity: 1 }}
+                  exit={{ rotate: 90, opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <Sun className="h-5 w-5 text-yellow-400" />
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="moon"
+                  initial={{ rotate: 90, opacity: 0 }}
+                  animate={{ rotate: 0, opacity: 1 }}
+                  exit={{ rotate: -90, opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <Moon className="h-5 w-5 text-slate-600" />
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.button>
         </DashboardHeader>
         <main className="flex-1 overflow-y-auto p-6 transition-all duration-300">
-          <div className="max-w-6xl mx-auto animate-fade-in">
+          <motion.div 
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            className="max-w-6xl mx-auto"
+          >
             {children}
-          </div>
+          </motion.div>
         </main>
       </div>
     </div>

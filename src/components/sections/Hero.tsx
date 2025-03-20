@@ -93,13 +93,31 @@ const Hero = () => {
             className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-12"
           >
             <Link to="/dashboard">
-              <Button size="lg" className="rounded-md bg-blue-600 hover:bg-blue-700 text-base px-8 py-6 shadow-glow shadow-blue-600/20 transition-all duration-300 hover:shadow-blue-600/40">
-                Try Dashboard Demo <ArrowRight className="ml-1 h-5 w-5" />
-              </Button>
+              <motion.div
+                whileHover={{ scale: 1.05, y: -5 }}
+                whileTap={{ scale: 0.95 }}
+                className="w-full"
+              >
+                <Button 
+                  size="lg" 
+                  className="rounded-md bg-blue-600 hover:bg-blue-700 text-base px-8 py-6 shadow-glow shadow-blue-600/20 transition-all duration-300 hover:shadow-blue-600/40"
+                >
+                  Try Dashboard Demo <ArrowRight className="ml-1 h-5 w-5" />
+                </Button>
+              </motion.div>
             </Link>
-            <Button size="lg" variant="outline" className="rounded-md border-zinc-700 hover:border-zinc-600 bg-transparent text-zinc-300 hover:bg-zinc-800/50 text-base px-8 py-6">
-              Learn More
-            </Button>
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <Button 
+                size="lg" 
+                variant="outline" 
+                className="rounded-md border-zinc-700 hover:border-zinc-600 bg-transparent text-zinc-300 hover:bg-zinc-800/50 text-base px-8 py-6 transition-all duration-300"
+              >
+                Learn More
+              </Button>
+            </motion.div>
           </motion.div>
         </div>
       </div>
@@ -120,7 +138,7 @@ const Hero = () => {
               <div className="text-center w-full">
                 <div className="px-4 py-1 bg-zinc-800/50 rounded-full inline-flex items-center">
                   <Search className="h-3 w-3 mr-2 text-zinc-400" />
-                  <span className="text-xs text-zinc-400">ecomwhisper.ai/dashboard</span>
+                  <span className="text-xs text-zinc-400">trisul.ai/dashboard</span>
                 </div>
               </div>
             </div>
