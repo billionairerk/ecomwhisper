@@ -48,13 +48,13 @@
   }
 
   .dark {
-    --background: 220 40% 2%;
+    --background: 222 47% 4%;
     --foreground: 210 40% 98%;
 
-    --card: 222 47% 5%;
+    --card: 222 47% 6%;
     --card-foreground: 210 40% 98%;
 
-    --popover: 222 47% 5%;
+    --popover: 222 47% 6%;
     --popover-foreground: 210 40% 98%;
 
     --primary: 217 91% 60%;
@@ -75,6 +75,15 @@
     --border: 217 33% 17%;
     --input: 217 33% 17%;
     --ring: 224 76% 48%;
+
+    --sidebar-background: 222 47% 5%;
+    --sidebar-foreground: 215 20% 65%;
+    --sidebar-primary: 210 40% 98%;
+    --sidebar-primary-foreground: 222 47% 5%;
+    --sidebar-accent: 217 33% 17%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 217 33% 17%;
+    --sidebar-ring: 224 76% 48%;
   }
 }
 
@@ -94,7 +103,7 @@
 
 @layer components {
   .glass-card {
-    @apply bg-white/80 dark:bg-black/50 backdrop-blur-lg border border-white/20 dark:border-white/10 shadow-glass;
+    @apply bg-white/80 dark:bg-black/50 backdrop-blur-lg border border-white/20 dark:border-white/10 shadow-glass dark:shadow-none;
   }
   
   .glass-panel {
@@ -115,6 +124,28 @@
   
   .text-balance {
     text-wrap: balance;
+  }
+
+  .vercel-glow {
+    @apply relative;
+  }
+
+  .vercel-glow::before {
+    content: '';
+    @apply absolute inset-0 rounded-[inherit] bg-gradient-to-r from-primary/20 to-primary/10 opacity-0 transition-opacity duration-500 -z-10 blur-xl;
+  }
+
+  .vercel-glow:hover::before {
+    @apply opacity-100;
+  }
+
+  .shimmer {
+    @apply relative overflow-hidden;
+  }
+
+  .shimmer::after {
+    @apply absolute top-0 -left-[100%] right-0 bottom-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-shimmer;
+    content: '';
   }
 }
 
@@ -171,4 +202,57 @@ html {
 .page-exit-active {
   opacity: 0;
   transition: opacity 300ms;
+}
+
+/* Dark mode toggle animation */
+.theme-toggle {
+  @apply relative w-10 h-6 rounded-full bg-muted p-1 transition-colors;
+}
+
+.theme-toggle-thumb {
+  @apply block w-4 h-4 rounded-full bg-white transform transition-transform;
+}
+
+.dark .theme-toggle {
+  @apply bg-muted;
+}
+
+.dark .theme-toggle-thumb {
+  @apply translate-x-4 bg-primary;
+}
+
+/* Grid background with lines */
+.grid-pattern {
+  @apply bg-grid bg-[length:40px_40px] dark:bg-[length:40px_40px];
+}
+
+/* Shiny card effect */
+.shiny-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.shiny-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.1) 100%
+  );
+  transform: skewX(-25deg);
+  transition: all 0.75s;
+}
+
+.shiny-card:hover::before {
+  left: 125%;
+}
+
+/* Code highlight */
+.code-highlight {
+  @apply bg-secondary/50 dark:bg-secondary/30 px-1 py-0.5 rounded text-sm font-mono;
 }
