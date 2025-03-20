@@ -8,6 +8,7 @@ import Features from '@/components/sections/Features';
 import Testimonials from '@/components/sections/Testimonials';
 import CTASection from '@/components/sections/CTASection';
 import { Button } from '@/components/ui/button';
+import { motion } from 'framer-motion';
 
 const Index = () => {
   useEffect(() => {
@@ -42,14 +43,34 @@ const Index = () => {
         {/* Dashboard Preview Section */}
         <section className="py-20 px-6 md:px-10 text-center">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to see it in action?</h2>
-            <p className="text-xl text-muted-foreground mb-8">
+            <motion.h2 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true }}
+              className="text-3xl md:text-4xl font-bold mb-6"
+            >
+              Ready to see it in action?
+            </motion.h2>
+            <motion.p 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              viewport={{ once: true }}
+              className="text-xl text-muted-foreground mb-8"
+            >
               Check out our interactive dashboard demo to experience the power of real-time SEO insights.
-            </p>
+            </motion.p>
             <Link to="/dashboard">
-              <Button size="lg" className="rounded-full text-base px-8 py-6">
-                View Dashboard Demo
-              </Button>
+              <motion.div 
+                whileHover={{ scale: 1.05 }} 
+                whileTap={{ scale: 0.95 }}
+                className="button-pulse inline-block"
+              >
+                <Button size="lg" className="rounded-full text-base px-8 py-6 shadow-glow hover:shadow-blue-600/40 hover:-translate-y-1 transition-all duration-300">
+                  View Dashboard Demo
+                </Button>
+              </motion.div>
             </Link>
           </div>
         </section>

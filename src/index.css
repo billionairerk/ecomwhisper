@@ -145,11 +145,12 @@
 
   .shadow-glow {
     box-shadow: 0 0 15px 0 rgba(56, 189, 248, 0.3);
-    transition: box-shadow 0.3s ease;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
   }
 
   .shadow-glow:hover {
     box-shadow: 0 0 25px 0 rgba(56, 189, 248, 0.5);
+    transform: translateY(-2px);
   }
 
   .shimmer {
@@ -159,6 +160,40 @@
   .shimmer::after {
     @apply absolute top-0 -left-[100%] right-0 bottom-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-shimmer;
     content: '';
+  }
+
+  /* Button animations */
+  .button-hover-effect {
+    @apply transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg;
+  }
+  
+  .button-pulse {
+    @apply relative overflow-hidden;
+  }
+  
+  .button-pulse::after {
+    content: '';
+    @apply absolute inset-0 rounded-[inherit] opacity-0 transition-opacity duration-1000 bg-gradient-to-r from-blue-500/30 to-violet-500/30 blur-md;
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  
+  @keyframes pulse {
+    0%, 100% { opacity: 0; }
+    50% { opacity: 1; }
+  }
+  
+  /* Premium card style */
+  .premium-card {
+    @apply relative overflow-hidden rounded-xl border border-zinc-800/50 bg-gradient-to-b from-zinc-900 to-black;
+  }
+  
+  .premium-card::before {
+    content: '';
+    @apply absolute inset-0 bg-gradient-to-br from-blue-500/10 to-violet-500/10 opacity-0 transition-opacity duration-300;
+  }
+  
+  .premium-card:hover::before {
+    @apply opacity-100;
   }
 }
 

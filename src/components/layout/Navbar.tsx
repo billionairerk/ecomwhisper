@@ -41,9 +41,14 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <div className="flex items-center">
           <Link to="/" className="flex items-center space-x-2">
-            <span className="text-3xl font-display font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-violet-400">
-              ecomWhisper
-            </span>
+            <motion.span 
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="text-3xl font-display font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-violet-400"
+            >
+              trisul.ai
+            </motion.span>
           </Link>
         </div>
 
@@ -56,16 +61,25 @@ const Navbar = () => {
         </nav>
 
         <div className="hidden md:flex items-center space-x-4">
-          <Button variant="outline" className="rounded-md border-zinc-700 hover:border-zinc-600 bg-transparent text-zinc-300 hover:bg-zinc-800/50">
-            Login
-          </Button>
-          <Button className="rounded-md bg-blue-600 hover:bg-blue-700 shadow-glow shadow-blue-600/20 transition-all duration-300 hover:shadow-blue-600/40">
-            Get Started <ChevronRight className="ml-1 h-4 w-4" />
-          </Button>
+          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            <Button variant="outline" className="rounded-md border-zinc-700 hover:border-zinc-600 bg-transparent text-zinc-300 hover:bg-zinc-800/50">
+              Login
+            </Button>
+          </motion.div>
+          <motion.div 
+            whileHover={{ scale: 1.05 }} 
+            whileTap={{ scale: 0.95 }}
+            className="button-pulse"
+          >
+            <Button className="rounded-md bg-blue-600 hover:bg-blue-700 shadow-glow shadow-blue-600/20 transition-all duration-300 hover:shadow-blue-600/40">
+              Get Started <ChevronRight className="ml-1 h-4 w-4" />
+            </Button>
+          </motion.div>
         </div>
 
         {/* Mobile Menu Button */}
-        <button
+        <motion.button
+          whileTap={{ scale: 0.95 }}
           className="md:hidden text-foreground p-2 rounded-full hover:bg-zinc-800/50 transition-colors"
           onClick={toggleMobileMenu}
           aria-label="Toggle menu"
@@ -75,7 +89,7 @@ const Navbar = () => {
           ) : (
             <Menu className="h-6 w-6 text-zinc-300" />
           )}
-        </button>
+        </motion.button>
       </div>
 
       {/* Mobile Menu */}
@@ -98,7 +112,7 @@ const Navbar = () => {
                   <Button variant="outline" className="w-full mb-4 border-zinc-700 bg-transparent text-zinc-300 hover:bg-zinc-800/50">
                     Login
                   </Button>
-                  <Button className="w-full bg-blue-600 hover:bg-blue-700">
+                  <Button className="w-full bg-blue-600 hover:bg-blue-700 shadow-glow">
                     Get Started
                   </Button>
                 </div>
@@ -112,22 +126,26 @@ const Navbar = () => {
 };
 
 const NavLink = ({ href, children }: { href: string; children: React.ReactNode }) => (
-  <a
+  <motion.a
     href={href}
     className="font-medium text-zinc-400 hover:text-zinc-200 transition-colors px-4 py-2 rounded-md hover:bg-zinc-800/50"
+    whileHover={{ y: -2 }}
+    whileTap={{ scale: 0.95 }}
   >
     {children}
-  </a>
+  </motion.a>
 );
 
 const MobileNavLink = ({ href, onClick, children }: { href: string; onClick: () => void; children: React.ReactNode }) => (
-  <a
+  <motion.a
     href={href}
     onClick={onClick}
     className="text-2xl font-display font-medium py-2 text-zinc-300 hover:text-white transition-colors"
+    whileHover={{ x: 5 }}
+    whileTap={{ scale: 0.95 }}
   >
     {children}
-  </a>
+  </motion.a>
 );
 
 export default Navbar;

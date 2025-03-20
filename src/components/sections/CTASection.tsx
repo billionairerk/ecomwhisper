@@ -74,7 +74,7 @@ const CTASection = () => {
             
             <motion.p 
               variants={itemVariants}
-              className="text-xl text-zinc-400 mb-8 max-w-2xl mx-auto"
+              className="text-xl text-zinc-300 mb-8 max-w-2xl mx-auto"
             >
               We believe in making the complex simple. In creating tools that enhance human capability. 
               This is SEO intelligence that's insanely great.
@@ -84,12 +84,20 @@ const CTASection = () => {
               variants={itemVariants}
               className="flex flex-col sm:flex-row items-center justify-center gap-4"
             >
-              <Button size="lg" className="rounded-md bg-blue-600 hover:bg-blue-700 text-base px-8 py-6 shadow-glow shadow-blue-600/20 transition-all duration-300 hover:shadow-blue-600/40 hover:translate-y-[-2px]">
-                Get Started <ArrowRight className="ml-1 h-5 w-5" />
-              </Button>
-              <Button size="lg" variant="outline" className="rounded-md border-zinc-700 hover:border-zinc-600 bg-transparent text-zinc-300 hover:bg-zinc-800/50 text-base px-8 py-6">
-                Schedule a Demo
-              </Button>
+              <motion.div 
+                whileHover={{ scale: 1.05, y: -5 }} 
+                whileTap={{ scale: 0.95 }}
+                className="button-pulse"
+              >
+                <Button size="lg" className="rounded-md bg-blue-600 hover:bg-blue-700 text-base px-8 py-6 shadow-glow shadow-blue-600/20 transition-all duration-300 hover:shadow-blue-600/40">
+                  Get Started <ArrowRight className="ml-1 h-5 w-5" />
+                </Button>
+              </motion.div>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button size="lg" variant="outline" className="rounded-md border-zinc-700 hover:border-zinc-600 bg-transparent text-zinc-300 hover:bg-zinc-800/50 text-base px-8 py-6">
+                  Schedule a Demo
+                </Button>
+              </motion.div>
             </motion.div>
           </div>
           
