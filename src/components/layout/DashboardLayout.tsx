@@ -11,14 +11,11 @@ interface DashboardLayoutProps {
 
 const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(true); // Default to dark mode
   
   useEffect(() => {
-    // Check if user prefers dark mode
-    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      setIsDarkMode(true);
-      document.documentElement.classList.add('dark');
-    }
+    // Add dark mode by default
+    document.documentElement.classList.add('dark');
     
     // Add transition class after initial load to enable smooth dark mode transitions
     setTimeout(() => {
@@ -41,8 +38,8 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   
   return (
     <div className={cn(
-      "flex h-screen bg-background overflow-hidden transition-colors duration-300",
-      "dark:bg-gradient-to-br dark:from-background dark:to-background/95"
+      "flex h-screen overflow-hidden transition-all duration-300",
+      "bg-gradient-to-br from-background to-background/95 dark:from-zinc-950 dark:to-black"
     )}>
       <div 
         className={cn(
