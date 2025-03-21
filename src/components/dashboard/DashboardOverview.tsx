@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { StatCard } from '@/components/ui/card/StatCard';
+import StatCard from '@/components/ui/card/StatCard';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import RankingsView from './RankingsView';
 import AlertsDisplay from './AlertsDisplay';
