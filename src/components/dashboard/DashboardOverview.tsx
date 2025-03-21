@@ -31,6 +31,8 @@ const DashboardOverview = () => {
           description="+12% from last month" 
           action="View Keywords"
           href="/dashboard/keywords"
+          trend="up"
+          change="+12%"
         />
         <StatCard 
           title="Avg. Rank Position" 
@@ -38,6 +40,8 @@ const DashboardOverview = () => {
           description="+2.4 positions" 
           action="Rankings"
           href="/dashboard/keywords"
+          trend="up"
+          change="+2.4"
         />
         <StatCard 
           title="Competitors" 
@@ -45,6 +49,7 @@ const DashboardOverview = () => {
           description="Top industry players" 
           action="View Competitors"
           href="/dashboard/competitors"
+          trend="neutral"
         />
         <StatCard 
           title="Est. Ad Savings" 
@@ -52,6 +57,8 @@ const DashboardOverview = () => {
           description="Organic vs PPC" 
           action="Growth"
           href="/dashboard/growth"
+          trend="up"
+          change="+15%"
         />
       </div>
 

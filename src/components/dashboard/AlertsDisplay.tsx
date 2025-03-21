@@ -3,8 +3,9 @@ import React, { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Bell } from 'lucide-react';
+import { Bell, CheckCircle } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
+import { Button } from '@/components/ui/button';
 
 interface Alert {
   id: string;
@@ -26,11 +27,29 @@ export const AlertsDisplay = () => {
       
       if (error) throw error;
       return data as Alert[];
-    }
+    },
+    refetchInterval: 60000 // Refetch every minute
   });
+
+  const markAsRead = async (alertId: string) => {
+    try {
+      await supabase
+        .from('alerts')
+        .update({ is_read: true })
+        .eq('id', alertId);
+      
+      refetch();
+      toast.success('Alert marked as read');
+    } catch (error) {
+      console.error('Error marking alert as read:', error);
+      toast.error('Failed to mark alert as read');
+    }
+  };
 
   // Set up real-time subscription to alerts table
   useEffect(() => {
+    console.log('Setting up real-time subscription to alerts table');
+    
     // Subscribe to inserts on the alerts table
     const channel = supabase
       .channel('alerts-changes')
@@ -54,6 +73,8 @@ export const AlertsDisplay = () => {
       )
       .subscribe();
 
+    console.log('Real-time subscription to alerts table established');
+
     // Cleanup subscription on unmount
     return () => {
       supabase.removeChannel(channel);
@@ -62,9 +83,20 @@ export const AlertsDisplay = () => {
 
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>Recent Alerts</CardTitle>
-        <CardDescription>Stay updated on changes and events</CardDescription>
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <div>
+          <CardTitle>Recent Alerts</CardTitle>
+          <CardDescription>Stay updated on changes and events</CardDescription>
+        </div>
+        {existingAlerts && existingAlerts.length > 0 && (
+          <Button 
+            variant="outline" 
+            size="sm"
+            onClick={() => toast.info("Alerts refreshed")}
+          >
+            Refresh
+          </Button>
+        )}
       </CardHeader>
       <CardContent>
         {existingAlerts && existingAlerts.length > 0 ? (
@@ -79,9 +111,21 @@ export const AlertsDisplay = () => {
                     <Bell className="h-4 w-4 text-primary" />
                     <p className="text-sm font-medium">{alert.message}</p>
                   </div>
-                  <span className="text-xs text-muted-foreground">
-                    {new Date(alert.timestamp).toLocaleString()}
-                  </span>
+                  <div className="flex items-center space-x-2">
+                    <span className="text-xs text-muted-foreground">
+                      {new Date(alert.timestamp).toLocaleString()}
+                    </span>
+                    {!alert.is_read && (
+                      <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        className="h-6 w-6"
+                        onClick={() => markAsRead(alert.id)}
+                      >
+                        <CheckCircle className="h-4 w-4" />
+                      </Button>
+                    )}
+                  </div>
                 </div>
               </div>
             ))}
@@ -90,6 +134,7 @@ export const AlertsDisplay = () => {
           <div className="text-center py-6 text-muted-foreground">
             <Bell className="h-8 w-8 mx-auto mb-2 opacity-40" />
             <p>No recent alerts</p>
+            <p className="text-xs mt-1">Alerts will appear here as they happen</p>
           </div>
         )}
       </CardContent>
