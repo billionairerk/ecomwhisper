@@ -9,7 +9,226 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      alerts: {
+        Row: {
+          id: string
+          is_read: boolean | null
+          message: string
+          timestamp: string | null
+          user_id: string | null
+        }
+        Insert: {
+          id?: string
+          is_read?: boolean | null
+          message: string
+          timestamp?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          id?: string
+          is_read?: boolean | null
+          message?: string
+          timestamp?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      backlinks: {
+        Row: {
+          competitor_id: string | null
+          domain_authority: number | null
+          id: string
+          source_url: string | null
+          timestamp: string | null
+        }
+        Insert: {
+          competitor_id?: string | null
+          domain_authority?: number | null
+          id?: string
+          source_url?: string | null
+          timestamp?: string | null
+        }
+        Update: {
+          competitor_id?: string | null
+          domain_authority?: number | null
+          id?: string
+          source_url?: string | null
+          timestamp?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "backlinks_competitor_id_fkey"
+            columns: ["competitor_id"]
+            isOneToOne: false
+            referencedRelation: "competitors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      competitors: {
+        Row: {
+          created_at: string | null
+          domain: string
+          id: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          domain: string
+          id?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          domain?: string
+          id?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      content: {
+        Row: {
+          competitor_id: string | null
+          content_text: string | null
+          id: string
+          timestamp: string | null
+          title: string | null
+          type: string | null
+          url: string
+        }
+        Insert: {
+          competitor_id?: string | null
+          content_text?: string | null
+          id?: string
+          timestamp?: string | null
+          title?: string | null
+          type?: string | null
+          url: string
+        }
+        Update: {
+          competitor_id?: string | null
+          content_text?: string | null
+          id?: string
+          timestamp?: string | null
+          title?: string | null
+          type?: string | null
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "content_competitor_id_fkey"
+            columns: ["competitor_id"]
+            isOneToOne: false
+            referencedRelation: "competitors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      keywords: {
+        Row: {
+          created_at: string | null
+          id: string
+          keyword: string
+          search_engine: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          keyword: string
+          search_engine: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          keyword?: string
+          search_engine?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      rankings: {
+        Row: {
+          competitor_id: string | null
+          id: string
+          keyword_id: string | null
+          position: number | null
+          timestamp: string | null
+          traffic_estimate: number | null
+        }
+        Insert: {
+          competitor_id?: string | null
+          id?: string
+          keyword_id?: string | null
+          position?: number | null
+          timestamp?: string | null
+          traffic_estimate?: number | null
+        }
+        Update: {
+          competitor_id?: string | null
+          id?: string
+          keyword_id?: string | null
+          position?: number | null
+          timestamp?: string | null
+          traffic_estimate?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rankings_competitor_id_fkey"
+            columns: ["competitor_id"]
+            isOneToOne: false
+            referencedRelation: "competitors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "rankings_keyword_id_fkey"
+            columns: ["keyword_id"]
+            isOneToOne: false
+            referencedRelation: "keywords"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      suggestions: {
+        Row: {
+          id: string
+          suggestion: string
+          timestamp: string | null
+          type: string | null
+          user_id: string | null
+        }
+        Insert: {
+          id?: string
+          suggestion: string
+          timestamp?: string | null
+          type?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          id?: string
+          suggestion?: string
+          timestamp?: string | null
+          type?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      table: {
+        Row: {
+          created_at: string
+          id: number
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+        }
+        Update: {
+          created_at?: string
+          id?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
