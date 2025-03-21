@@ -6,7 +6,11 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { addCompetitor } from '@/services/competitorService';
 import { toast } from "sonner";
 
-const AddCompetitorForm = () => {
+interface AddCompetitorFormProps {
+  onSuccess?: () => void;
+}
+
+const AddCompetitorForm = ({ onSuccess }: AddCompetitorFormProps) => {
   const [domain, setDomain] = useState('');
   const queryClient = useQueryClient();
 
@@ -16,6 +20,9 @@ const AddCompetitorForm = () => {
       queryClient.invalidateQueries({ queryKey: ['competitors'] });
       setDomain('');
       toast.success('Competitor added successfully');
+      if (onSuccess) {
+        onSuccess();
+      }
     },
     onError: (error) => {
       toast.error(`Failed to add competitor: ${error.message}`);

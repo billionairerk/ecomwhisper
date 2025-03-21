@@ -7,7 +7,11 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { addKeyword } from '@/services/keywordService';
 import { toast } from "sonner";
 
-const AddKeywordForm = () => {
+interface AddKeywordFormProps {
+  onSuccess?: () => void;
+}
+
+const AddKeywordForm = ({ onSuccess }: AddKeywordFormProps) => {
   const [keyword, setKeyword] = useState('');
   const [searchEngine, setSearchEngine] = useState<'google' | 'youtube' | 'amazon' | 'flipkart'>('google');
   const queryClient = useQueryClient();
@@ -19,6 +23,9 @@ const AddKeywordForm = () => {
       queryClient.invalidateQueries({ queryKey: ['keywords'] });
       setKeyword('');
       toast.success('Keyword added successfully');
+      if (onSuccess) {
+        onSuccess();
+      }
     },
     onError: (error) => {
       toast.error(`Failed to add keyword: ${error.message}`);

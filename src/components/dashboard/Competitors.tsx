@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getCompetitors } from '@/services/competitorService';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -10,6 +10,7 @@ import { deleteCompetitor } from '@/services/competitorService';
 import AddCompetitorForm from './AddCompetitorForm';
 
 const Competitors = () => {
+  const [showAddForm, setShowAddForm] = useState(false);
   const { data: competitors, isLoading, error, refetch } = useQuery({
     queryKey: ['competitors'],
     queryFn: getCompetitors
@@ -25,6 +26,10 @@ const Competitors = () => {
     }
   };
 
+  const toggleAddForm = () => {
+    setShowAddForm(!showAddForm);
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -32,7 +37,7 @@ const Competitors = () => {
           <h1 className="text-3xl font-bold tracking-tight">Competitors</h1>
           <p className="text-muted-foreground">Monitor your competitors' performance and strategies.</p>
         </div>
-        <Button>
+        <Button onClick={toggleAddForm}>
           <Plus className="mr-2 h-4 w-4" /> Add Competitor
         </Button>
       </div>
@@ -90,7 +95,7 @@ const Competitors = () => {
               <CardContent className="p-8 text-center">
                 <h2 className="text-xl font-semibold mb-2">No Competitors Yet</h2>
                 <p className="text-muted-foreground mb-4">Start by adding competitors you want to monitor.</p>
-                <Button>
+                <Button onClick={toggleAddForm}>
                   <Plus className="mr-2 h-4 w-4" /> Add Your First Competitor
                 </Button>
               </CardContent>
@@ -99,7 +104,7 @@ const Competitors = () => {
         </div>
         
         <div className="md:col-span-1">
-          <AddCompetitorForm />
+          {showAddForm && <AddCompetitorForm onSuccess={() => {refetch(); setShowAddForm(false);}} />}
         </div>
       </div>
     </div>
