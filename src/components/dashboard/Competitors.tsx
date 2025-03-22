@@ -5,12 +5,15 @@ import { getCompetitors } from '@/services/competitorService';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
-import { Plus, Trash2, ExternalLink } from 'lucide-react';
+import { Plus, Trash2, ExternalLink, Search } from 'lucide-react';
 import { deleteCompetitor } from '@/services/competitorService';
 import AddCompetitorForm from './AddCompetitorForm';
+import CompetitorDetail from './CompetitorDetail';
 
 const Competitors = () => {
   const [showAddForm, setShowAddForm] = useState(false);
+  const [selectedCompetitor, setSelectedCompetitor] = useState<any>(null);
+  
   const { data: competitors, isLoading, error, refetch } = useQuery({
     queryKey: ['competitors'],
     queryFn: getCompetitors
@@ -29,6 +32,20 @@ const Competitors = () => {
   const toggleAddForm = () => {
     setShowAddForm(!showAddForm);
   };
+
+  const viewCompetitorDetail = (competitor: any) => {
+    setSelectedCompetitor(competitor);
+  };
+
+  // If a competitor is selected, show the detail view
+  if (selectedCompetitor) {
+    return (
+      <CompetitorDetail 
+        competitor={selectedCompetitor}
+        onClose={() => setSelectedCompetitor(null)}
+      />
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -78,6 +95,9 @@ const Competitors = () => {
                         </div>
                       </div>
                       <div className="flex space-x-2">
+                        <Button variant="outline" size="icon" onClick={() => viewCompetitorDetail(competitor)}>
+                          <Search className="h-4 w-4" />
+                        </Button>
                         <Button variant="outline" size="icon" onClick={() => window.open(`https://${competitor.domain}`, '_blank')}>
                           <ExternalLink className="h-4 w-4" />
                         </Button>

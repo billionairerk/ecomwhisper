@@ -1,5 +1,6 @@
 
 import { supabase } from "@/integrations/supabase/client";
+import { scrapeCompetitor } from "./scrapingService";
 
 export async function getCompetitors() {
   const { data, error } = await supabase
@@ -41,6 +42,14 @@ export async function addCompetitor(domain: string) {
   if (error) {
     console.error('Error adding competitor:', error);
     throw error;
+  }
+  
+  // Trigger initial scraping of the competitor
+  try {
+    await scrapeCompetitor(cleanDomain);
+  } catch (error) {
+    console.error('Error during initial competitor scan:', error);
+    // We don't throw here because the competitor was still added successfully
   }
   
   return data?.[0];
