@@ -27,7 +27,8 @@ export async function addKeyword(keyword: string) {
     .from('keywords')
     .insert([{ 
       keyword,
-      user_id: user.id
+      user_id: user.id,
+      search_engine: 'google' // Default search engine
     }])
     .select();
   

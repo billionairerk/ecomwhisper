@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -15,21 +15,46 @@ const Auth = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  
+  // Check if user is already logged in
+  useEffect(() => {
+    const checkSession = async () => {
+      const { data } = await supabase.auth.getSession();
+      if (data.session) {
+        navigate('/dashboard');
+      }
+    };
+    
+    checkSession();
+  }, [navigate]);
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (password.length < 6) {
+      toast.error('Password must be at least 6 characters');
+      return;
+    }
+    
     setLoading(true);
     
     try {
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
+        options: {
+          emailRedirectTo: window.location.origin + '/dashboard'
+        }
       });
       
       if (error) throw error;
       
-      toast.success('Registration successful! Please check your email for verification.');
-      console.log('Signup successful', data);
+      if (data.user?.identities?.length === 0) {
+        toast.error('This email is already registered. Please sign in instead.');
+      } else {
+        toast.success('Registration successful! Please check your email for verification.');
+        console.log('Signup successful', data);
+      }
     } catch (error: any) {
       toast.error(error.message || 'An error occurred during sign up');
       console.error('Error signing up:', error.message);

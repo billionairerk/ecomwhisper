@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Bell, User, Search, Home, LogOut } from 'lucide-react';
+import { Bell, Search, Home, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
@@ -22,6 +22,10 @@ const DashboardHeader = ({ children }: DashboardHeaderProps) => {
       toast.success('Signed out successfully');
       navigate('/');
     }
+  };
+
+  const goToHome = () => {
+    navigate('/');
   };
 
   return (
@@ -54,13 +58,13 @@ const DashboardHeader = ({ children }: DashboardHeaderProps) => {
           className="relative"
         >
           <Button 
-            variant="ghost" 
-            size="icon" 
-            className="relative hover:bg-zinc-800"
-            onClick={() => navigate('/')}
+            variant="outline" 
+            className="flex items-center gap-2 hover:bg-zinc-800"
+            onClick={goToHome}
             title="Go to homepage"
           >
             <Home size={18} className="text-zinc-400" />
+            <span className="hidden sm:inline">Home</span>
           </Button>
         </motion.div>
         
