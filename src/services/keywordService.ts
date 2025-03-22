@@ -1,4 +1,3 @@
-
 import { supabase } from "@/integrations/supabase/client";
 
 export async function getKeywords() {
@@ -15,7 +14,7 @@ export async function getKeywords() {
   return data || [];
 }
 
-export async function addKeyword(keyword: string) {
+export async function addKeyword(keyword: string, searchEngine: 'google' | 'youtube' | 'amazon' | 'flipkart' = 'google') {
   // Get the current user's ID
   const { data: { user } } = await supabase.auth.getUser();
   
@@ -28,7 +27,7 @@ export async function addKeyword(keyword: string) {
     .insert([{ 
       keyword,
       user_id: user.id,
-      search_engine: 'google' // Default search engine
+      search_engine: searchEngine
     }])
     .select();
   
