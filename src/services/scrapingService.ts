@@ -1,7 +1,8 @@
 
 import { supabase } from "@/integrations/supabase/client";
 
-interface SeoMetrics {
+// Define interfaces for the response types
+export interface SeoMetrics {
   id: string;
   competitor_id: string;
   backlinks: number;
@@ -10,7 +11,7 @@ interface SeoMetrics {
   created_at: string;
 }
 
-interface ScrapedPage {
+export interface ScrapedPage {
   id: string;
   competitor_id: string;
   page_url: string;

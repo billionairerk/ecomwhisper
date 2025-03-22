@@ -1,35 +1,16 @@
 
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { getSeoMetrics, getScrapedPages, scrapeCompetitor } from '@/services/scrapingService';
+import { getSeoMetrics, getScrapedPages, scrapeCompetitor, SeoMetrics, ScrapedPage } from '@/services/scrapingService';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
-import { RefreshCw, ExternalLink, FileText } from 'lucide-react';
+import { RefreshCw, ExternalLink, FileText, BarChart3 } from 'lucide-react';
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '@/components/ui/table';
 
 interface CompetitorDetailProps {
   competitor: any;
   onClose: () => void;
-}
-
-// Define types for the data returned from our service
-interface SeoMetrics {
-  id: string;
-  competitor_id: string;
-  backlinks: number;
-  domain_authority: number;
-  traffic_estimate: number;
-  created_at: string;
-}
-
-interface ScrapedPage {
-  id: string;
-  competitor_id: string;
-  page_url: string;
-  page_title: string | null;
-  word_count: number;
-  created_at: string;
 }
 
 const CompetitorDetail = ({ competitor, onClose }: CompetitorDetailProps) => {
@@ -129,6 +110,10 @@ const CompetitorDetail = ({ competitor, onClose }: CompetitorDetailProps) => {
                   <p className="text-sm text-muted-foreground">Est. Monthly Traffic</p>
                   <p className="text-2xl font-bold">{seoMetrics.traffic_estimate.toLocaleString()}</p>
                 </div>
+                <Button variant="outline" size="sm" className="w-full" onClick={() => toast.info('Detailed analytics coming soon!')}>
+                  <BarChart3 className="h-4 w-4 mr-2" />
+                  View Detailed Analytics
+                </Button>
               </div>
             ) : (
               <div className="text-center py-6">
@@ -153,33 +138,35 @@ const CompetitorDetail = ({ competitor, onClose }: CompetitorDetailProps) => {
                 <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
               </div>
             ) : scrapedPages && scrapedPages.length > 0 ? (
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Page</TableHead>
-                    <TableHead>Word Count</TableHead>
-                    <TableHead>Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {scrapedPages.map((page: any) => (
-                    <TableRow key={page.id}>
-                      <TableCell>
-                        <div>
-                          <p className="font-medium">{page.page_title || 'Untitled'}</p>
-                          <p className="text-sm text-muted-foreground truncate max-w-[300px]">{page.page_url}</p>
-                        </div>
-                      </TableCell>
-                      <TableCell>{page.word_count.toLocaleString()} words</TableCell>
-                      <TableCell>
-                        <Button variant="ghost" size="sm" onClick={() => window.open(page.page_url, '_blank')}>
-                          <ExternalLink className="h-4 w-4" />
-                        </Button>
-                      </TableCell>
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Page</TableHead>
+                      <TableHead>Word Count</TableHead>
+                      <TableHead>Actions</TableHead>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+                  </TableHeader>
+                  <TableBody>
+                    {scrapedPages.map((page: ScrapedPage) => (
+                      <TableRow key={page.id}>
+                        <TableCell>
+                          <div>
+                            <p className="font-medium">{page.page_title || 'Untitled'}</p>
+                            <p className="text-sm text-muted-foreground truncate max-w-[300px]">{page.page_url}</p>
+                          </div>
+                        </TableCell>
+                        <TableCell>{page.word_count.toLocaleString()} words</TableCell>
+                        <TableCell>
+                          <Button variant="ghost" size="sm" onClick={() => window.open(page.page_url, '_blank')}>
+                            <ExternalLink className="h-4 w-4" />
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
             ) : (
               <div className="text-center py-6">
                 <FileText className="h-12 w-12 mx-auto text-muted-foreground mb-3" />

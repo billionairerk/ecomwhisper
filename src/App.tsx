@@ -10,6 +10,7 @@ import NotFound from "./pages/NotFound";
 import Dashboard from "./pages/Dashboard";
 import Auth from "./pages/Auth";
 import { supabase } from "@/integrations/supabase/client";
+import { User, Session } from '@supabase/supabase-js';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -21,23 +22,39 @@ const queryClient = new QueryClient({
 });
 
 const App = () => {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Set up auth state listener first
+    // Set up auth state listener FIRST
     const { data: authListener } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        console.log("Auth state changed:", event, session?.user?.id);
-        setUser(session?.user ?? null);
+      (event, newSession) => {
+        console.log("Auth state changed:", event, newSession?.user?.id);
+        setSession(newSession);
+        setUser(newSession?.user ?? null);
         setLoading(false);
+        
+        // Force refresh the token if it's expired or about to expire
+        if (newSession?.expires_at) {
+          const expiresAt = newSession.expires_at * 1000; // convert to ms
+          const timeNow = Date.now();
+          const expiresIn = expiresAt - timeNow;
+          
+          // If token expires in less than 60 minutes, refresh it
+          if (expiresIn < 1000 * 60 * 60) {
+            console.log("Token expires soon, refreshing...");
+            supabase.auth.refreshSession();
+          }
+        }
       }
     );
 
-    // Then check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      console.log("Initial session check:", session?.user?.id);
-      setUser(session?.user ?? null);
+    // THEN check for existing session
+    supabase.auth.getSession().then(({ data: { session: currentSession } }) => {
+      console.log("Initial session check:", currentSession?.user?.id);
+      setSession(currentSession);
+      setUser(currentSession?.user ?? null);
       setLoading(false);
     });
 
