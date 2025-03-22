@@ -190,6 +190,76 @@ export type Database = {
           },
         ]
       }
+      scraped_pages: {
+        Row: {
+          competitor_id: string | null
+          created_at: string | null
+          id: string
+          page_title: string | null
+          page_url: string
+          word_count: number
+        }
+        Insert: {
+          competitor_id?: string | null
+          created_at?: string | null
+          id?: string
+          page_title?: string | null
+          page_url: string
+          word_count: number
+        }
+        Update: {
+          competitor_id?: string | null
+          created_at?: string | null
+          id?: string
+          page_title?: string | null
+          page_url?: string
+          word_count?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "scraped_pages_competitor_id_fkey"
+            columns: ["competitor_id"]
+            isOneToOne: false
+            referencedRelation: "competitors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      seo_metrics: {
+        Row: {
+          backlinks: number
+          competitor_id: string | null
+          created_at: string | null
+          domain_authority: number
+          id: string
+          traffic_estimate: number
+        }
+        Insert: {
+          backlinks: number
+          competitor_id?: string | null
+          created_at?: string | null
+          domain_authority: number
+          id?: string
+          traffic_estimate: number
+        }
+        Update: {
+          backlinks?: number
+          competitor_id?: string | null
+          created_at?: string | null
+          domain_authority?: number
+          id?: string
+          traffic_estimate?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "seo_metrics_competitor_id_fkey"
+            columns: ["competitor_id"]
+            isOneToOne: false
+            referencedRelation: "competitors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       suggestions: {
         Row: {
           id: string

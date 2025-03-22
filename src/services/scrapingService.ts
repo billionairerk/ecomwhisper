@@ -1,8 +1,26 @@
 
 import { supabase } from "@/integrations/supabase/client";
 
+interface SeoMetrics {
+  id: string;
+  competitor_id: string;
+  backlinks: number;
+  domain_authority: number;
+  traffic_estimate: number;
+  created_at: string;
+}
+
+interface ScrapedPage {
+  id: string;
+  competitor_id: string;
+  page_url: string;
+  page_title: string | null;
+  word_count: number;
+  created_at: string;
+}
+
 // Get SEO metrics for a competitor
-export async function getSeoMetrics(competitorId: string) {
+export async function getSeoMetrics(competitorId: string): Promise<SeoMetrics | null> {
   const { data, error } = await supabase
     .from('seo_metrics')
     .select('*')
@@ -19,7 +37,7 @@ export async function getSeoMetrics(competitorId: string) {
 }
 
 // Get scraped pages for a competitor
-export async function getScrapedPages(competitorId: string) {
+export async function getScrapedPages(competitorId: string): Promise<ScrapedPage[]> {
   const { data, error } = await supabase
     .from('scraped_pages')
     .select('*')

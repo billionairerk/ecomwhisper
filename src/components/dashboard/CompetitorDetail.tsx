@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getSeoMetrics, getScrapedPages, scrapeCompetitor } from '@/services/scrapingService';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -13,6 +13,25 @@ interface CompetitorDetailProps {
   onClose: () => void;
 }
 
+// Define types for the data returned from our service
+interface SeoMetrics {
+  id: string;
+  competitor_id: string;
+  backlinks: number;
+  domain_authority: number;
+  traffic_estimate: number;
+  created_at: string;
+}
+
+interface ScrapedPage {
+  id: string;
+  competitor_id: string;
+  page_url: string;
+  page_title: string | null;
+  word_count: number;
+  created_at: string;
+}
+
 const CompetitorDetail = ({ competitor, onClose }: CompetitorDetailProps) => {
   const [isScanning, setIsScanning] = useState(false);
 
@@ -20,7 +39,7 @@ const CompetitorDetail = ({ competitor, onClose }: CompetitorDetailProps) => {
     data: seoMetrics, 
     isLoading: metricsLoading, 
     refetch: refetchMetrics 
-  } = useQuery({
+  } = useQuery<SeoMetrics | null>({
     queryKey: ['seoMetrics', competitor.id],
     queryFn: () => getSeoMetrics(competitor.id),
     enabled: !!competitor.id,
@@ -30,7 +49,7 @@ const CompetitorDetail = ({ competitor, onClose }: CompetitorDetailProps) => {
     data: scrapedPages, 
     isLoading: pagesLoading, 
     refetch: refetchPages 
-  } = useQuery({
+  } = useQuery<ScrapedPage[]>({
     queryKey: ['scrapedPages', competitor.id],
     queryFn: () => getScrapedPages(competitor.id),
     enabled: !!competitor.id,
@@ -43,7 +62,7 @@ const CompetitorDetail = ({ competitor, onClose }: CompetitorDetailProps) => {
       toast.success(`Successfully scanned ${competitor.domain}`);
       refetchMetrics();
       refetchPages();
-    } catch (error) {
+    } catch (error: any) {
       toast.error(`Failed to scan competitor: ${error.message}`);
     } finally {
       setIsScanning(false);
