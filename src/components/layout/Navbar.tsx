@@ -1,22 +1,40 @@
 
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { ChevronRight, Menu, X } from 'lucide-react';
+import { ChevronRight, Menu, X, LogOut } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [user, setUser] = useState<any>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
     };
 
+    // Check if user is authenticated
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+    });
+
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        setUser(session?.user ?? null);
+      }
+    );
+
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      authListener?.subscription.unsubscribe();
+    };
   }, []);
 
   const toggleMobileMenu = () => {
@@ -26,6 +44,24 @@ const Navbar = () => {
     } else {
       document.body.style.overflow = 'auto';
     }
+  };
+
+  const handleLogout = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      toast.error('Error signing out');
+    } else {
+      toast.success('Signed out successfully');
+      navigate('/');
+    }
+  };
+
+  const handleLoginClick = () => {
+    navigate('/auth');
+  };
+
+  const handleDashboardClick = () => {
+    navigate('/dashboard');
   };
 
   return (
@@ -62,29 +98,64 @@ const Navbar = () => {
         </nav>
 
         <div className="hidden md:flex items-center space-x-4">
-          <motion.div 
-            whileHover={{ scale: 1.05 }} 
-            whileTap={{ scale: 0.95 }}
-            className="button-hover"
-          >
-            <Button 
-              variant="outline" 
-              className="rounded-md border-zinc-700 hover:border-zinc-600 bg-transparent text-zinc-300 hover:bg-zinc-800/50 transition-all duration-300"
-            >
-              Login
-            </Button>
-          </motion.div>
-          <motion.div 
-            whileHover={{ scale: 1.05 }} 
-            whileTap={{ scale: 0.95 }}
-            className="button-pulse"
-          >
-            <Button 
-              className="rounded-md bg-blue-600 hover:bg-blue-700 shadow-glow shadow-blue-600/20 transition-all duration-300 hover:shadow-blue-600/40 hover:-translate-y-1"
-            >
-              Get Started <ChevronRight className="ml-1 h-4 w-4" />
-            </Button>
-          </motion.div>
+          {user ? (
+            <>
+              <motion.div 
+                whileHover={{ scale: 1.05 }} 
+                whileTap={{ scale: 0.95 }}
+                className="button-hover"
+              >
+                <Button 
+                  variant="outline" 
+                  className="rounded-md border-zinc-700 hover:border-zinc-600 bg-transparent text-zinc-300 hover:bg-zinc-800/50 transition-all duration-300"
+                  onClick={handleDashboardClick}
+                >
+                  Dashboard
+                </Button>
+              </motion.div>
+              <motion.div 
+                whileHover={{ scale: 1.05 }} 
+                whileTap={{ scale: 0.95 }}
+                className="button-hover"
+              >
+                <Button 
+                  variant="outline" 
+                  className="rounded-md border-zinc-700 hover:border-zinc-600 bg-transparent text-zinc-300 hover:bg-zinc-800/50 transition-all duration-300"
+                  onClick={handleLogout}
+                >
+                  <LogOut className="mr-2 h-4 w-4" /> Sign Out
+                </Button>
+              </motion.div>
+            </>
+          ) : (
+            <>
+              <motion.div 
+                whileHover={{ scale: 1.05 }} 
+                whileTap={{ scale: 0.95 }}
+                className="button-hover"
+              >
+                <Button 
+                  variant="outline" 
+                  className="rounded-md border-zinc-700 hover:border-zinc-600 bg-transparent text-zinc-300 hover:bg-zinc-800/50 transition-all duration-300"
+                  onClick={handleLoginClick}
+                >
+                  Login
+                </Button>
+              </motion.div>
+              <motion.div 
+                whileHover={{ scale: 1.05 }} 
+                whileTap={{ scale: 0.95 }}
+                className="button-pulse"
+              >
+                <Button 
+                  className="rounded-md bg-blue-600 hover:bg-blue-700 shadow-glow shadow-blue-600/20 transition-all duration-300 hover:shadow-blue-600/40 hover:-translate-y-1"
+                  onClick={handleLoginClick}
+                >
+                  Get Started <ChevronRight className="ml-1 h-4 w-4" />
+                </Button>
+              </motion.div>
+            </>
+          )}
         </div>
 
         {/* Mobile Menu Button */}
@@ -119,17 +190,51 @@ const Navbar = () => {
                 <MobileNavLink href="#pricing" onClick={toggleMobileMenu}>Pricing</MobileNavLink>
                 <MobileNavLink href="#about" onClick={toggleMobileMenu}>About</MobileNavLink>
                 <div className="border-t border-zinc-800 pt-6 mt-6">
-                  <Button 
-                    variant="outline" 
-                    className="w-full mb-4 border-zinc-700 bg-transparent text-zinc-300 hover:bg-zinc-800/50 transition-all duration-300"
-                  >
-                    Login
-                  </Button>
-                  <Button 
-                    className="w-full bg-blue-600 hover:bg-blue-700 shadow-glow shadow-blue-600/20 transition-all duration-300 hover:shadow-blue-600/40 hover:-translate-y-1"
-                  >
-                    Get Started
-                  </Button>
+                  {user ? (
+                    <>
+                      <Button 
+                        variant="outline" 
+                        className="w-full mb-4 border-zinc-700 bg-transparent text-zinc-300 hover:bg-zinc-800/50 transition-all duration-300"
+                        onClick={() => {
+                          toggleMobileMenu();
+                          navigate('/dashboard');
+                        }}
+                      >
+                        Dashboard
+                      </Button>
+                      <Button 
+                        className="w-full bg-blue-600 hover:bg-blue-700 shadow-glow shadow-blue-600/20 transition-all duration-300 hover:shadow-blue-600/40 hover:-translate-y-1"
+                        onClick={() => {
+                          toggleMobileMenu();
+                          handleLogout();
+                        }}
+                      >
+                        Sign Out
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      <Button 
+                        variant="outline" 
+                        className="w-full mb-4 border-zinc-700 bg-transparent text-zinc-300 hover:bg-zinc-800/50 transition-all duration-300"
+                        onClick={() => {
+                          toggleMobileMenu();
+                          navigate('/auth');
+                        }}
+                      >
+                        Login
+                      </Button>
+                      <Button 
+                        className="w-full bg-blue-600 hover:bg-blue-700 shadow-glow shadow-blue-600/20 transition-all duration-300 hover:shadow-blue-600/40 hover:-translate-y-1"
+                        onClick={() => {
+                          toggleMobileMenu();
+                          navigate('/auth');
+                        }}
+                      >
+                        Get Started
+                      </Button>
+                    </>
+                  )}
                 </div>
               </nav>
             </div>

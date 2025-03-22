@@ -1,15 +1,29 @@
 
 import React from 'react';
-import { Bell, User, Search } from 'lucide-react';
+import { Bell, User, Search, Home, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
 
 interface DashboardHeaderProps {
   children?: React.ReactNode;
 }
 
 const DashboardHeader = ({ children }: DashboardHeaderProps) => {
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      toast.error('Error signing out');
+    } else {
+      toast.success('Signed out successfully');
+      navigate('/');
+    }
+  };
+
   return (
     <header className="h-16 border-b border-zinc-800 bg-zinc-900/80 backdrop-blur-md px-6 flex items-center justify-between">
       <div className="flex items-center w-full max-w-md">
@@ -39,6 +53,22 @@ const DashboardHeader = ({ children }: DashboardHeaderProps) => {
           whileTap={{ scale: 0.95 }}
           className="relative"
         >
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className="relative hover:bg-zinc-800"
+            onClick={() => navigate('/')}
+            title="Go to homepage"
+          >
+            <Home size={18} className="text-zinc-400" />
+          </Button>
+        </motion.div>
+        
+        <motion.div 
+          whileHover={{ scale: 1.05 }} 
+          whileTap={{ scale: 0.95 }}
+          className="relative"
+        >
           <Button variant="ghost" size="icon" className="relative hover:bg-zinc-800">
             <Bell size={18} className="text-zinc-400" />
             <span className="absolute top-1 right-1 w-2 h-2 bg-blue-500 rounded-full shadow-glow shadow-blue-500/50"></span>
@@ -47,16 +77,27 @@ const DashboardHeader = ({ children }: DashboardHeaderProps) => {
         
         <div className="flex items-center space-x-3">
           <div className="hidden md:block text-right">
-            <p className="text-sm font-medium text-zinc-300">Sarah Johnson</p>
-            <p className="text-xs text-zinc-500">Admin</p>
+            <p className="text-sm font-medium text-zinc-300">Account</p>
+            <button 
+              className="text-xs text-zinc-500 hover:text-blue-400"
+              onClick={handleLogout}
+            >
+              Sign out
+            </button>
           </div>
           <motion.div 
             whileHover={{ scale: 1.05 }} 
             whileTap={{ scale: 0.95 }}
             className="relative"
           >
-            <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full bg-zinc-800 hover:bg-zinc-700">
-              <User size={18} className="text-zinc-300" />
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="h-9 w-9 rounded-full bg-zinc-800 hover:bg-zinc-700"
+              onClick={handleLogout}
+              title="Sign out"
+            >
+              <LogOut size={18} className="text-zinc-300" />
             </Button>
           </motion.div>
         </div>

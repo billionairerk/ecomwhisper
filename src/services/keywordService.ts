@@ -15,12 +15,19 @@ export async function getKeywords() {
   return data || [];
 }
 
-export async function addKeyword(keyword: string, searchEngine: 'google' | 'youtube' | 'amazon' | 'flipkart') {
+export async function addKeyword(keyword: string) {
+  // Get the current user's ID
+  const { data: { user } } = await supabase.auth.getUser();
+  
+  if (!user) {
+    throw new Error('You must be logged in to add a keyword');
+  }
+
   const { data, error } = await supabase
     .from('keywords')
     .insert([{ 
       keyword,
-      search_engine: searchEngine,
+      user_id: user.id
     }])
     .select();
   

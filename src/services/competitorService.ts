@@ -16,9 +16,20 @@ export async function getCompetitors() {
 }
 
 export async function addCompetitor(domain: string) {
+  // Get the current user's ID
+  const { data: { user } } = await supabase.auth.getUser();
+  
+  if (!user) {
+    throw new Error('You must be logged in to add a competitor');
+  }
+
+  // Insert competitor with the user_id field
   const { data, error } = await supabase
     .from('competitors')
-    .insert([{ domain }])
+    .insert([{ 
+      domain,
+      user_id: user.id
+    }])
     .select();
   
   if (error) {
