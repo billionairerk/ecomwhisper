@@ -1,7 +1,7 @@
 
 import React, { useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Sparkles, Search, LineChart, BarChart4, Zap } from 'lucide-react';
+import { ArrowRight, Sparkles, Search, LineChart, BarChart4, Zap, Shield } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
@@ -42,6 +42,18 @@ const Hero = () => {
     show: { opacity: 1, y: 0, transition: { duration: 0.5 } }
   };
 
+  const floatAnimation = {
+    y: [-10, 10],
+    transition: {
+      y: {
+        duration: 2,
+        repeat: Infinity,
+        repeatType: "reverse",
+        ease: "easeInOut"
+      }
+    }
+  };
+
   return (
     <motion.div 
       initial="hidden"
@@ -75,7 +87,7 @@ const Hero = () => {
             variants={item}
             className="text-4xl sm:text-5xl md:text-7xl font-display font-bold tracking-tight text-balance leading-tight bg-clip-text text-transparent bg-gradient-to-b from-white to-zinc-400"
           >
-            The SEO Tool <br />That Just Works
+            Crush Your Competition <br />With AI-Powered Insights
           </motion.h1>
           
           {/* Subheadline */}
@@ -83,41 +95,70 @@ const Hero = () => {
             variants={item}
             className="max-w-2xl mx-auto text-xl text-zinc-400"
           >
-            At the intersection of simplicity and power. Monitor competitors, receive real-time alerts, 
-            and get AI insights in one beautifully designed experience.
+            The ultimate competitor tracking tool that analyzes SEO, backlinks, traffic, and growth trends—all in one place. 
+            Get ahead before they even see you coming!
           </motion.p>
+          
+          {/* Feature Pills */}
+          <motion.div
+            variants={item}
+            className="flex flex-wrap justify-center gap-3 mt-6"
+          >
+            <span className="bg-zinc-800/50 text-zinc-300 px-3 py-1 rounded-full text-sm flex items-center">
+              <Search className="h-3 w-3 mr-1 text-blue-400" /> Track Competitors in Real-Time
+            </span>
+            <span className="bg-zinc-800/50 text-zinc-300 px-3 py-1 rounded-full text-sm flex items-center">
+              <LineChart className="h-3 w-3 mr-1 text-green-400" /> Analyze SEO & Backlinks Instantly
+            </span>
+            <span className="bg-zinc-800/50 text-zinc-300 px-3 py-1 rounded-full text-sm flex items-center">
+              <Zap className="h-3 w-3 mr-1 text-yellow-400" /> Uncover Hidden Market Opportunities
+            </span>
+          </motion.div>
           
           {/* CTA Buttons */}
           <motion.div 
             variants={item}
             className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-12"
           >
-            <Link to="/dashboard">
+            <Link to="/auth">
               <motion.div
                 whileHover={{ scale: 1.05, y: -5 }}
                 whileTap={{ scale: 0.95 }}
-                className="w-full"
+                className="w-full button-pulse"
               >
                 <Button 
                   size="lg" 
                   className="rounded-md bg-blue-600 hover:bg-blue-700 text-base px-8 py-6 shadow-glow shadow-blue-600/20 transition-all duration-300 hover:shadow-blue-600/40"
                 >
-                  Try Dashboard Demo <ArrowRight className="ml-1 h-5 w-5" />
+                  Start Winning Today <ArrowRight className="ml-1 h-5 w-5" />
                 </Button>
               </motion.div>
             </Link>
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Button 
-                size="lg" 
-                variant="outline" 
-                className="rounded-md border-zinc-700 hover:border-zinc-600 bg-transparent text-zinc-300 hover:bg-zinc-800/50 text-base px-8 py-6 transition-all duration-300"
+            <Link to="/dashboard">
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
-                Learn More
-              </Button>
-            </motion.div>
+                <Button 
+                  size="lg" 
+                  variant="outline" 
+                  className="rounded-md border-zinc-700 hover:border-zinc-600 bg-transparent text-zinc-300 hover:bg-zinc-800/50 text-base px-8 py-6 transition-all duration-300"
+                >
+                  Try Dashboard Demo
+                </Button>
+              </motion.div>
+            </Link>
+          </motion.div>
+          
+          {/* Trust Badge */}
+          <motion.div
+            variants={item}
+            className="mt-8 flex items-center justify-center"
+          >
+            <div className="flex items-center text-zinc-500 text-sm">
+              <Shield className="h-4 w-4 mr-2 text-zinc-400" />
+              <span>Trusted by 500+ businesses worldwide</span>
+            </div>
           </motion.div>
         </div>
       </div>
@@ -126,6 +167,7 @@ const Hero = () => {
       <motion.div 
         variants={item}
         className="relative w-full max-w-6xl mx-auto"
+        animate={floatAnimation}
       >
         <div className="neo-blur rounded-[1rem] border border-zinc-800/50 shadow-elevated overflow-hidden transition-all duration-500 hover:border-zinc-700/50 hover:shadow-glow hover:shadow-blue-600/10">
           <div className="relative bg-zinc-900/80 backdrop-blur-lg p-6 rounded-t-[1rem] border-b border-zinc-800/50">
@@ -138,7 +180,7 @@ const Hero = () => {
               <div className="text-center w-full">
                 <div className="px-4 py-1 bg-zinc-800/50 rounded-full inline-flex items-center">
                   <Search className="h-3 w-3 mr-2 text-zinc-400" />
-                  <span className="text-xs text-zinc-400">trisul.ai/dashboard</span>
+                  <span className="text-xs text-zinc-400">ecomwhisper.ai/dashboard</span>
                 </div>
               </div>
             </div>
@@ -153,11 +195,28 @@ const Hero = () => {
                       <div className="mr-3 p-2 bg-blue-900/30 rounded-lg">
                         <LineChart className="h-5 w-5 text-blue-400" />
                       </div>
-                      <h4 className="font-medium text-zinc-200">Keyword Rankings</h4>
+                      <h4 className="font-medium text-zinc-200">Competitor Rankings</h4>
                     </div>
                     <div className="text-xs font-medium bg-blue-900/30 text-blue-400 px-2.5 py-0.5 rounded-full">Live Data</div>
                   </div>
-                  <div className="h-[120px] bg-zinc-900/40 rounded-lg"></div>
+                  <div className="h-[120px] bg-zinc-900/40 rounded-lg flex items-center justify-center">
+                    <div className="w-full px-4">
+                      <div className="h-16 w-full relative">
+                        {/* Animated chart lines */}
+                        <div className="absolute bottom-0 left-0 w-full h-full flex items-end">
+                          <div className="w-[8%] h-[35%] mx-[1%] bg-blue-500 rounded-t"></div>
+                          <div className="w-[8%] h-[65%] mx-[1%] bg-blue-500 rounded-t"></div>
+                          <div className="w-[8%] h-[45%] mx-[1%] bg-blue-500 rounded-t"></div>
+                          <div className="w-[8%] h-[75%] mx-[1%] bg-blue-500 rounded-t"></div>
+                          <div className="w-[8%] h-[55%] mx-[1%] bg-blue-500 rounded-t"></div>
+                          <div className="w-[8%] h-[90%] mx-[1%] bg-blue-500 rounded-t"></div>
+                          <div className="w-[8%] h-[40%] mx-[1%] bg-blue-500 rounded-t"></div>
+                          <div className="w-[8%] h-[60%] mx-[1%] bg-blue-500 rounded-t"></div>
+                          <div className="w-[8%] h-[80%] mx-[1%] bg-blue-500 rounded-t"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 <div className="bg-zinc-800/40 backdrop-blur-sm border border-zinc-700/30 rounded-xl p-4 transition-all duration-300 hover:border-zinc-700/50 hover:bg-zinc-800/50">
                   <div className="flex justify-between items-center mb-4">
@@ -169,7 +228,22 @@ const Hero = () => {
                     </div>
                     <div className="text-xs font-medium bg-violet-900/30 text-violet-400 px-2.5 py-0.5 rounded-full">Updated</div>
                   </div>
-                  <div className="h-[120px] bg-zinc-900/40 rounded-lg"></div>
+                  <div className="h-[120px] bg-zinc-900/40 rounded-lg flex items-center justify-center">
+                    <div className="grid grid-cols-3 gap-4 w-full px-6">
+                      <div className="flex flex-col items-center">
+                        <div className="text-2xl font-bold text-violet-400">86%</div>
+                        <div className="text-xs text-zinc-500">SEO Score</div>
+                      </div>
+                      <div className="flex flex-col items-center">
+                        <div className="text-2xl font-bold text-green-400">12.3k</div>
+                        <div className="text-xs text-zinc-500">Backlinks</div>
+                      </div>
+                      <div className="flex flex-col items-center">
+                        <div className="text-2xl font-bold text-yellow-400">72</div>
+                        <div className="text-xs text-zinc-500">Domain Authority</div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
               <div className="col-span-4 bg-zinc-800/40 backdrop-blur-sm border border-zinc-700/30 rounded-xl p-4 transition-all duration-300 hover:border-zinc-700/50 hover:bg-zinc-800/50">

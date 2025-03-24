@@ -71,10 +71,15 @@ const App = () => {
           <Sonner />
           <BrowserRouter>
             <Routes>
+              {/* Public routes - accessible without login */}
               <Route path="/" element={<Index />} />
+              
+              {/* Auth route - redirects to dashboard if already logged in */}
               <Route path="/auth" element={
                 user ? <Navigate to="/dashboard" replace /> : <Auth />
               } />
+              
+              {/* Protected routes - require authentication */}
               <Route 
                 path="/dashboard/*" 
                 element={
@@ -87,7 +92,8 @@ const App = () => {
                   )
                 } 
               />
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              
+              {/* 404 route */}
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
