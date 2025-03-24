@@ -26,6 +26,7 @@ const Navbar = () => {
 
     const { data: authListener } = supabase.auth.onAuthStateChange(
       (event, session) => {
+        console.log("Navbar auth state changed:", event);
         setUser(session?.user ?? null);
       }
     );
@@ -47,12 +48,18 @@ const Navbar = () => {
   };
 
   const handleLogout = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) {
-      toast.error('Error signing out');
-    } else {
-      toast.success('Signed out successfully');
-      navigate('/');
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        toast.error('Error signing out');
+        console.error('Error signing out:', error);
+      } else {
+        toast.success('Signed out successfully');
+        navigate('/');
+      }
+    } catch (err) {
+      console.error('Unexpected error during sign out:', err);
+      toast.error('An unexpected error occurred');
     }
   };
 

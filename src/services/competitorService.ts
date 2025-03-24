@@ -1,6 +1,6 @@
 
 import { supabase } from "@/integrations/supabase/client";
-import { scrapeCompetitor } from "./scrapingService";
+import { toast } from "sonner";
 
 export async function getCompetitors() {
   const { data, error } = await supabase
@@ -30,29 +30,24 @@ export async function addCompetitor(domain: string) {
   cleanDomain = cleanDomain.replace(/^www\./, '');
   cleanDomain = cleanDomain.split('/')[0]; // Remove any paths
   
-  // Insert competitor with the user_id field
-  const { data, error } = await supabase
-    .from('competitors')
-    .insert([{ 
-      domain: cleanDomain,
-      user_id: user.id
-    }])
-    .select();
-  
-  if (error) {
+  try {
+    // Call the edge function to handle the scraping
+    const { data, error } = await supabase.functions.invoke('scrape-competitor', {
+      body: { 
+        domain: cleanDomain,
+        userId: user.id
+      }
+    });
+    
+    if (error) throw error;
+    
+    toast.success(`Successfully added competitor: ${cleanDomain}`);
+    return data;
+  } catch (error) {
     console.error('Error adding competitor:', error);
+    toast.error(`Failed to add competitor: ${error.message}`);
     throw error;
   }
-  
-  // Trigger initial scraping of the competitor
-  try {
-    await scrapeCompetitor(cleanDomain);
-  } catch (error) {
-    console.error('Error during initial competitor scan:', error);
-    // We don't throw here because the competitor was still added successfully
-  }
-  
-  return data?.[0];
 }
 
 export async function deleteCompetitor(id: string) {
@@ -71,7 +66,8 @@ export async function deleteCompetitor(id: string) {
 
 export async function analyzeCompetitor(domain: string) {
   try {
-    // Generate AI insights based on competitor domain
+    // This would ideally call an edge function for more advanced analysis
+    // For now, return mock data
     const insights = {
       strength: ["Strong brand recognition", "Extensive content library", "High domain authority"],
       weakness: ["Limited product range", "Outdated UI/UX", "Slow page loading speeds"],
