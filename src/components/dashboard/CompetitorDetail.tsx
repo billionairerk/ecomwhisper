@@ -1,12 +1,13 @@
 
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { getSeoMetrics, getScrapedPages, scrapeCompetitor, SeoMetrics, ScrapedPage } from '@/services/scrapingService';
+import { getSeoMetrics, getScrapedPages, scrapeCompetitor, getSeoSuggestions, SeoMetrics, ScrapedPage, SeoSuggestion } from '@/services/scrapingService';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
-import { RefreshCw, ExternalLink, FileText, BarChart3 } from 'lucide-react';
+import { RefreshCw, ExternalLink, FileText, BarChart3, Lightbulb } from 'lucide-react';
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '@/components/ui/table';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 interface CompetitorDetailProps {
   competitor: any;
@@ -36,15 +37,31 @@ const CompetitorDetail = ({ competitor, onClose }: CompetitorDetailProps) => {
     enabled: !!competitor.id,
   });
 
+  const {
+    data: seoSuggestions,
+    isLoading: suggestionsLoading,
+    refetch: refetchSuggestions
+  } = useQuery<SeoSuggestion[]>({
+    queryKey: ['seoSuggestions', competitor.id],
+    queryFn: () => getSeoSuggestions(competitor.id),
+    enabled: !!competitor.id,
+  });
+
   const handleScan = async () => {
     try {
       setIsScanning(true);
+      toast.info(`Starting comprehensive analysis of ${competitor.domain}. This may take a minute...`);
       await scrapeCompetitor(competitor.domain);
-      toast.success(`Successfully scanned ${competitor.domain}`);
-      refetchMetrics();
-      refetchPages();
+      toast.success(`Successfully analyzed ${competitor.domain}`);
+      
+      // Refetch all data
+      await Promise.all([
+        refetchMetrics(),
+        refetchPages(),
+        refetchSuggestions()
+      ]);
     } catch (error: any) {
-      toast.error(`Failed to scan competitor: ${error.message}`);
+      toast.error(`Failed to analyze competitor: ${error.message}`);
     } finally {
       setIsScanning(false);
     }
@@ -74,7 +91,7 @@ const CompetitorDetail = ({ competitor, onClose }: CompetitorDetailProps) => {
             disabled={isScanning}
           >
             <RefreshCw className={`mr-2 h-4 w-4 ${isScanning ? 'animate-spin' : ''}`} />
-            {isScanning ? 'Scanning...' : 'Scan Now'}
+            {isScanning ? 'Analyzing...' : 'Analyze Now'}
           </Button>
           <Button variant="outline" size="sm" onClick={() => window.open(`https://${competitor.domain}`, '_blank')}>
             <ExternalLink className="h-4 w-4 mr-2" />
@@ -82,6 +99,30 @@ const CompetitorDetail = ({ competitor, onClose }: CompetitorDetailProps) => {
           </Button>
         </div>
       </div>
+
+      {/* AI-Powered SEO Suggestions */}
+      {seoSuggestions && seoSuggestions.length > 0 && (
+        <Card className="border-blue-200 bg-blue-50 dark:bg-blue-950 dark:border-blue-900">
+          <CardHeader className="pb-2">
+            <CardTitle className="flex items-center">
+              <Lightbulb className="h-5 w-5 mr-2 text-blue-500" />
+              AI-Powered SEO Suggestions
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              {seoSuggestions.map((suggestion, index) => (
+                <Alert key={index} className="bg-white dark:bg-blue-900/40">
+                  <AlertTitle className="text-sm font-medium">Suggestion {index + 1}</AlertTitle>
+                  <AlertDescription className="text-sm">
+                    {suggestion.suggestion}
+                  </AlertDescription>
+                </Alert>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <Card>
@@ -120,7 +161,7 @@ const CompetitorDetail = ({ competitor, onClose }: CompetitorDetailProps) => {
                 <p className="text-muted-foreground mb-4">No data available yet</p>
                 <Button variant="outline" size="sm" onClick={handleScan}>
                   <RefreshCw className="h-4 w-4 mr-2" />
-                  Scan Now
+                  Analyze Now
                 </Button>
               </div>
             )}
@@ -129,7 +170,7 @@ const CompetitorDetail = ({ competitor, onClose }: CompetitorDetailProps) => {
 
         <Card className="col-span-2">
           <CardHeader>
-            <CardTitle>Scraped Pages</CardTitle>
+            <CardTitle>Analyzed Pages</CardTitle>
             <CardDescription>Content analysis from competitor pages</CardDescription>
           </CardHeader>
           <CardContent>
@@ -170,10 +211,10 @@ const CompetitorDetail = ({ competitor, onClose }: CompetitorDetailProps) => {
             ) : (
               <div className="text-center py-6">
                 <FileText className="h-12 w-12 mx-auto text-muted-foreground mb-3" />
-                <p className="text-muted-foreground mb-4">No pages have been scraped yet</p>
+                <p className="text-muted-foreground mb-4">No pages have been analyzed yet</p>
                 <Button variant="outline" size="sm" onClick={handleScan}>
                   <RefreshCw className="h-4 w-4 mr-2" />
-                  Scan Pages Now
+                  Analyze Pages Now
                 </Button>
               </div>
             )}

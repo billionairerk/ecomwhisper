@@ -20,6 +20,13 @@ export interface ScrapedPage {
   created_at: string;
 }
 
+export interface SeoSuggestion {
+  id: string;
+  suggestion: string;
+  type: string;
+  timestamp: string;
+}
+
 // Get SEO metrics for a competitor
 export async function getSeoMetrics(competitorId: string): Promise<SeoMetrics | null> {
   const { data, error } = await supabase
@@ -53,7 +60,24 @@ export async function getScrapedPages(competitorId: string): Promise<ScrapedPage
   return data || [];
 }
 
-// Trigger scraping for a domain
+// Get SEO suggestions for a competitor
+export async function getSeoSuggestions(competitorId: string): Promise<SeoSuggestion[]> {
+  const { data, error } = await supabase
+    .from('suggestions')
+    .select('*')
+    .eq('type', 'seo_improvement')
+    .order('timestamp', { ascending: false })
+    .limit(5);
+    
+  if (error) {
+    console.error('Error fetching SEO suggestions:', error);
+    throw error;
+  }
+  
+  return data || [];
+}
+
+// Trigger comprehensive scraping for a domain
 export async function scrapeCompetitor(domain: string) {
   try {
     const { data, error } = await supabase.functions.invoke('scrape-competitor', {
