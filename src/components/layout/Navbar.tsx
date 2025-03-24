@@ -61,7 +61,11 @@ const Navbar = () => {
   };
 
   const handleDashboardClick = () => {
-    navigate('/dashboard');
+    if (user) {
+      navigate('/dashboard');
+    } else {
+      navigate('/auth');
+    }
   };
 
   return (

@@ -209,7 +209,7 @@ const Auth = () => {
           className="cursor-pointer"
         >
           <span className="text-2xl font-display font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-violet-400">
-            EcomWhisper
+            trisul.ai
           </span>
         </motion.div>
       </div>

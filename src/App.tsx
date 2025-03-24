@@ -76,7 +76,7 @@ const App = () => {
               
               {/* Auth route - redirects to dashboard if already logged in */}
               <Route path="/auth" element={
-                user ? <Navigate to="/dashboard" replace /> : <Auth />
+                !loading && user ? <Navigate to="/dashboard" replace /> : <Auth />
               } />
               
               {/* Protected routes - require authentication */}
